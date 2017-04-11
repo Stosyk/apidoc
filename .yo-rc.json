@@ -1,0 +1,10 @@
+{
+  "generator-openapi-repo": {
+    "importExistingSpec": false,
+    "name": "Stosyk",
+    "repo": "Stosyk/apidoc",
+    "splitSpec": true,
+    "samples": true,
+    "installSwaggerUI": true
+  }
+}
