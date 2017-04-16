@@ -18,9 +18,13 @@
   "scripts": {
     "deploy": "npm run build && deploy-to-gh-pages --update web_deploy",
     "build": "node ./scripts/build.js",
+    "build-editor": "node ./scripts/build-editor.js",
     "swagger": "swagger-repo",
-    "test": "swagger-repo validate",
+    "test": "node ./scripts/test.js",
     "start": "gulp serve",
+    "edit-public": "gulp serve --spec public",
+    "edit-manage": "gulp serve --spec manage",
+    "edit-admin": "gulp serve --spec admin",
     "deploy-branch": "node ./scripts/deploy-branch.js"
   }
 }

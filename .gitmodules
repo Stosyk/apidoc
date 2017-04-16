@@ -1,0 +1,3 @@
+[submodule "openapi-spec"]
+	path = openapi-spec
+	url = git@github.com:Stosyk/openapi-spec.git
