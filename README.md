@@ -3,9 +3,9 @@
 
 Stosyk is a translations management system for software projects.
 Current repo contains documentation UI for APIs:
-- public
-- manage
-- admin
+- `public`
+- `manage`
+- `admin`
 
 ## Links
 
@@ -35,7 +35,7 @@ You can start only one instance of `swagger-editor` at the moment, choose specif
 - `manage`
 - `admin`
 
-1. Run `npm start --spec public`(replace public if you need another spec)
+1. Run `npm start --spec public`(replace `public` if you need another spec)
 2. Checkout console output to see where local server is started. You can use all [links](#links) by replacing https://stosyk.github.io/apidoc/ with url from the message: `Server started <url>`
 3. Make changes using your favorite editor or `swagger-editor` (look for URL in console output)
 4. All changes are immediately propagated to your local server, moreover all documentation pages will be automagically refreshed in a browser after each change
