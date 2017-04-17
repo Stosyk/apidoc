@@ -3,6 +3,7 @@
 
 # Dir for API portal deploy
 web_deploy
+spec
 
 # Logs
 logs
