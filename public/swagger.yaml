@@ -1,0 +1,199 @@
+swagger: '2.0'
+schemes:
+  - https
+host: stosyk-sandbox.herokuapp.com
+basePath: /v1
+x-servers:
+  - url: //api.stosyk.io/v1
+    description: Production server
+  - url: //stosyk-sandbox.herokuapp.com/v1
+    description: Sandbox server
+info:
+  description: |
+    Stosyk is a translations management system for software projects.
+    The API allows you to work with localization data stored in Stosyk for your account.
+    # Introduction
+    This specification describes the API in 
+    [OpenAPI/Swagger format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
+    It also uses [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo) tool and 
+    [ReDoc](https://github.com/Rebilly/ReDoc) documentation engine.
+
+    # OpenAPI Specification
+    The goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which
+    allows both humans and computers to discover and understand the capabilities of the service without access to source
+    code, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can 
+    understand and interact with the remote service with a minimal amount of implementation logic. Similar to what
+    interfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.
+
+    # Schema
+    The API is only accessible via HTTPS, the base URL is https://api.stosyk.io/, and the current version is v1 which presents in the base URL for all requests: https://api.stosyk.io/v1/.
+
+    # Authentication
+    When you sign up for an account, you will be able to create your first API key.
+    You can generate as many API keys as you want, manage permissions and delete them. 
+    You authenticate to the API by providing your secret key in the request header.
+
+    Stosyk API offers Bearer authentication.
+    It requires sending an `Authorization` header containing the type value `Bearer` followed by your authentication token.
+    You can control the specific granular permissions and expiration for certain token over the [Manage website](https://stosyk.io).
+    `TODO:` add an example of usage
+  version: 1.0.0
+  title: stosyk.io
+  contact:
+    name: Maksym Koshtenko
+    email: maksum.k@gmail.com
+  x-logo:
+    url: logo.png
+produces:
+  - application/json
+consumes:
+  - application/json
+tags:
+  - name: Projects
+    description: Operations with projects
+  - name: Translations
+    description: Operations with translations
+securityDefinitions:
+  bearer_auth:
+    description: |
+      This scheme relies on authenticating users by having them present a standard `Authorization` header containing the value `Bearer` followed by their API key / authorization token.
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /projects:
+    get:
+      tags:
+        - Projects
+      summary: Get all projects
+      description: |
+        Returns all projects for current user
+      operationId: getAllProjects
+      parameters:
+        - name: since
+          in: query
+          required: false
+          description: 'Unix timestamp, allows filtering by update time'
+          type: number
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectsContainer'
+        '401':
+          description: Unauthorized
+  '/projects/{id}':
+    get:
+      tags:
+        - Projects
+      summary: Get project
+      description: |
+        Returns project with id
+      operationId: getProject
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Int identifier of a project
+          type: integer
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ProjectContainer'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Project not found
+  '/projects/{id}/translations/{locale}':
+    get:
+      tags:
+        - Translations
+      summary: Get translations
+      description: |
+        Returns translations for certain project and locale
+      operationId: getTranslations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Int identifier of a project
+          type: integer
+        - name: locale
+          in: path
+          required: true
+          description: 'Locale identifier (e.g. ''en'', ''de'', etc.) for translations'
+          type: string
+        - name: since
+          in: query
+          required: false
+          description: 'Unix timestamp, allows filtering by update time'
+          type: number
+      security:
+        - bearer_auth: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Translations'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Project not found
+definitions:
+  Meta:
+    type: object
+    properties:
+      limit:
+        description: Number of entities per page
+        type: integer
+        example: 10
+      offset:
+        description: Index of first entity
+        type: integer
+        example: 0
+      total:
+        description: Total number of entities
+        type: integer
+        example: 2
+  Project:
+    type: object
+    properties:
+      id:
+        description: Unique identifier
+        type: integer
+        example: 10001
+      name:
+        description: Name of the project
+        type: string
+        example: MyProject
+  ProjectContainer:
+    type: object
+    properties:
+      projects:
+        description: List of projects
+        type: array
+        items:
+          $ref: '#/definitions/Project'
+  ProjectsContainer:
+    type: object
+    properties:
+      _meta:
+        $ref: '#/definitions/Meta'
+      projects:
+        description: List of projects
+        type: array
+        items:
+          $ref: '#/definitions/Project'
+  Translations:
+    type: object
+    properties:
+      _meta:
+        $ref: '#/definitions/Meta'
+      translations:
+        description: List of translations
+        type: object

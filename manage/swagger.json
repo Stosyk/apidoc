@@ -1,0 +1,562 @@
+{
+  "swagger": "2.0",
+  "schemes": [
+    "https"
+  ],
+  "host": "stosyk-sandbox.herokuapp.com",
+  "basePath": "/manage/v1",
+  "x-servers": [
+    {
+      "url": "//api.stosyk.io/manage/v1",
+      "description": "Default server"
+    },
+    {
+      "url": "//stosyk-sandbox.herokuapp.com/manage/v1",
+      "description": "Sandbox server"
+    }
+  ],
+  "info": {
+    "description": "Stosyk is a translations management system for software projects.\nThe API allows you to work with localization data stored in Stosyk for your account.\n\n# Introduction\nThis specification describes the API in \n[OpenAPI/Swagger format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).\nIt also uses [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo) tool and \n[ReDoc](https://github.com/Rebilly/ReDoc) documentation engine.\n\n# OpenAPI Specification\nThe goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which\nallows both humans and computers to discover and understand the capabilities of the service without access to source\ncode, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can \nunderstand and interact with the remote service with a minimal amount of implementation logic. Similar to what\ninterfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.\n\n# Schema\nThe API is only accessible via HTTPS, the base URL is https://api.stosyk.io/manage/, and the current version is v1 which presents in the base URL for all requests: https://api.stosyk.io/manage/v1/.\n\n# Authentication\nWhen you sign up for an account, you will be able to create your first API key.\nYou can generate as many API keys as you want, manage permissions and delete them. \nYou authenticate to the API by providing your secret key in the request header.\n\nStosyk API offers Bearer authentication.\nIt requires sending an `Authorization` header containing the type value `Bearer` followed by your authentication token.\nYou can control the specific granular permissions and expiration for certain token over the [Manage website](https://stosyk.io).\n`TODO:` add an example of usage\n",
+    "version": "1.0.0",
+    "title": "manage.stosyk.io",
+    "contact": {
+      "name": "Maksym Koshtenko",
+      "email": "maksum.k@gmail.com"
+    },
+    "x-logo": {
+      "url": "logo.png"
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Projects"
+    },
+    {
+      "name": "Tags"
+    }
+  ],
+  "securityDefinitions": {
+    "bearer_auth": {
+      "description": "This scheme relies on authenticating users by having them present a standard `Authorization` header containing the value `Bearer` followed by their API key / authorization token.\n",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/projects": {
+      "post": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Create",
+        "description": "Create new project for current user\n",
+        "operationId": "createNewProjects",
+        "parameters": [
+          {
+            "name": "project",
+            "in": "body",
+            "description": "The project JSON you want to create",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProjectContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Get All",
+        "description": "Returns all projects for current user\n",
+        "operationId": "getAllProjects",
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProjectsContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Get By ID",
+        "description": "Returns project with id\n",
+        "operationId": "getProject",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProjectContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Update",
+        "description": "Updates project with id\n",
+        "operationId": "updateProject",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          },
+          {
+            "name": "project",
+            "in": "body",
+            "description": "The project JSON you want to update",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProjectContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Delete",
+        "description": "Deletes project with id\n",
+        "operationId": "deleteProject",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/tags": {
+      "post": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Create",
+        "description": "Create new tag for the project\n",
+        "operationId": "createNewTag",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          },
+          {
+            "name": "tag",
+            "in": "body",
+            "description": "The tag JSON you want to create",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TagContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Get All",
+        "description": "Returns all tags for the project\n",
+        "operationId": "getAllTags",
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TagsContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/projects/{projectId}/tags/{tagId}": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Get By ID",
+        "description": "Returns tag with id inside the project\n",
+        "operationId": "getTag",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          },
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a tag",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TagContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Update",
+        "description": "Updates tag with id inside the project\n",
+        "operationId": "updateTag",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          },
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a tag",
+            "type": "integer"
+          },
+          {
+            "name": "tag",
+            "in": "body",
+            "description": "The tag JSON you want to update",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TagContainer"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Delete",
+        "description": "Deletes tag with id inside the project\n",
+        "operationId": "deleteTag",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a project",
+            "type": "integer"
+          },
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "description": "Int identifier of a tag",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "bearer_auth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Meta": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Number of entities per page",
+          "type": "integer",
+          "example": 10
+        },
+        "offset": {
+          "description": "Index of first entity",
+          "type": "integer",
+          "example": 0
+        },
+        "total": {
+          "description": "Total number of entities",
+          "type": "integer",
+          "example": 2
+        }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique identifier",
+          "type": "integer",
+          "example": 10001
+        },
+        "name": {
+          "description": "Name of the project",
+          "type": "string",
+          "example": "MyProject"
+        }
+      }
+    },
+    "ProjectContainer": {
+      "type": "object",
+      "properties": {
+        "projects": {
+          "description": "List of projects",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Project"
+          }
+        }
+      }
+    },
+    "ProjectsContainer": {
+      "type": "object",
+      "properties": {
+        "_meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "projects": {
+          "description": "List of projects",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Project"
+          }
+        }
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique identifier",
+          "type": "integer",
+          "example": 4563
+        },
+        "level": {
+          "description": "Level of the tag, represents its depts",
+          "type": "integer",
+          "example": 1
+        },
+        "name": {
+          "description": "Name of the tag",
+          "type": "string",
+          "example": "MyCompany"
+        }
+      }
+    },
+    "TagContainer": {
+      "type": "object",
+      "properties": {
+        "projects": {
+          "description": "List of tags",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        }
+      }
+    },
+    "TagsContainer": {
+      "type": "object",
+      "properties": {
+        "_meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "projects": {
+          "description": "List of tags",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        }
+      }
+    }
+  }
+}
